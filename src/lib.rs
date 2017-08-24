@@ -37,7 +37,7 @@ mod conversions;
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 pub use wand::*;
-pub use bindings::MetricType;
+pub use bindings::{MetricType, FilterType, ColorspaceType};
 
 use libc::size_t;
 #[cfg(not(target_os = "freebsd"))]

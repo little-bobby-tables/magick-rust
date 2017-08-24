@@ -234,6 +234,27 @@ impl MagickWand {
         }
     }
 
+    /// Sets the image colorspace. Unlike `set_image_colorspace`,
+    /// also transforms the image data to the target colorspace.
+    pub fn transform_image_colorspace(&self, colorspace: bindings::ColorspaceType) -> bool {
+        unsafe {
+            bindings::MagickTransformImageColorspace(self.wand, colorspace) == bindings::MagickBooleanType::MagickTrue
+        }
+    }
+
+    /// Returns a `PixelWand` instance for the pixel specified by x and y offests.
+    pub fn get_image_pixel_color(&self, x: isize, y: isize) -> Option<PixelWand> {
+        let pw = PixelWand::new();
+
+        unsafe {
+            if bindings::MagickGetImagePixelColor(self.wand, x, y, pw.wand) == bindings::MagickBooleanType::MagickTrue {
+                Some(pw)
+            } else {
+                None
+            }
+        }
+    }
+
     /// Write the current image to the provided path.
     pub fn write_image(&self, path: &str) -> Result<(), &'static str> {
         let c_name = CString::new(path).unwrap();
