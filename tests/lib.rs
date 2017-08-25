@@ -234,4 +234,9 @@ fn test_transform_image_colorspace() {
 
     let pixel_grayscale = wand.get_image_pixel_color(10, 10).unwrap();
     assert_eq!(pixel_grayscale.get_hsl().hue, 0.0);
+
+    /* The output of `export_image_pixels` should match
+     * `convert -type Grayscale tests/data/IMG_5745.JPG[2x2+0+0] txt:` */
+    assert_eq!(wand.export_image_pixels(0, 0, 2, 2, "I").unwrap(),
+        vec![212, 212, 210, 210])
 }

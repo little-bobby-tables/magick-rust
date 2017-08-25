@@ -255,6 +255,24 @@ impl MagickWand {
         }
     }
 
+    /// Extracts pixel data from the image as a vector of 0..255 values defined by `map`.
+    /// See https://www.imagemagick.org/api/magick-image.php#MagickExportImagePixels for more information.
+    pub fn export_image_pixels(&self, x: isize, y: isize, width: usize, height: usize, map: &str) -> Option<Vec<u8>> {
+        let c_map = CString::new(map).unwrap();
+        let capacity = width * height * map.len();
+        let mut pixels = Vec::with_capacity(capacity);
+
+        unsafe {
+            pixels.set_len(capacity as usize);
+            if bindings::MagickExportImagePixels(self.wand, x, y, width, height, c_map.as_ptr(),
+                bindings::StorageType::CharPixel, pixels.as_mut_ptr() as *mut c_void) == bindings::MagickBooleanType::MagickTrue {
+                Some(pixels)
+            } else {
+                None
+            }
+        }
+    }
+
     /// Write the current image to the provided path.
     pub fn write_image(&self, path: &str) -> Result<(), &'static str> {
         let c_name = CString::new(path).unwrap();
