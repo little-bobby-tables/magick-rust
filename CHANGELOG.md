@@ -5,10 +5,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This file follows the convention described at
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.7.1] - 2017-12-30
+### Changed
+- gentoo90: Hide more types from bindgen to fix the build for some systems
+- gentoo90: Build now supports Windows
+
+## [0.7.0] - 2017-08-26
 ### Changed
 - Upgrade bindgen to 0.29
-- Change to MagickWand 7.0
+- little-bobby-tables: Change to MagickWand 7.0;
+  this introduces backward incompatible changes...
 - `get_quantum` and `set_quantum` now take `Quantum` instead of `u16`
 - `resize_image` no longer takes a `blur_factor` argument
 - `InterpolatePixelMethod` was renamed `PixelInterpolateMethod`
