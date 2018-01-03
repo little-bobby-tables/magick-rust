@@ -234,14 +234,6 @@ impl MagickWand {
         }
     }
 
-    /// Sets the image colorspace. Unlike `set_image_colorspace`,
-    /// also transforms the image data to the target colorspace.
-    pub fn transform_image_colorspace(&self, colorspace: bindings::ColorspaceType) -> bool {
-        unsafe {
-            bindings::MagickTransformImageColorspace(self.wand, colorspace) == bindings::MagickBooleanType::MagickTrue
-        }
-    }
-
     /// Returns a `PixelWand` instance for the pixel specified by x and y offests.
     pub fn get_image_pixel_color(&self, x: isize, y: isize) -> Option<PixelWand> {
         let pw = PixelWand::new();
@@ -328,6 +320,10 @@ impl MagickWand {
     }
 
     mutations!(
+        /// Set the image colorspace, transforming (unlike `set_image_colorspace`) image data in
+        /// the process.
+        MagickTransformImageColorspace => transform_image_colorspace(colorspace: bindings::ColorspaceType)
+
         /// Reduce the number of colors in the image.
         MagickQuantizeImage => quantize_image(
             number_of_colors: size_t, colorspace: bindings::ColorspaceType,
