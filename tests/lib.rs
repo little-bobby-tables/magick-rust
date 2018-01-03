@@ -23,6 +23,7 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 use std::sync::{Once, ONCE_INIT};
+use magick_rust::ToMagick;
 
 // Used to make sure MagickWand is initialized exactly once. Note that we
 // do not bother shutting down, we simply exit when the tests are done.
@@ -239,4 +240,18 @@ fn test_transform_image_colorspace() {
      * `convert -type Grayscale tests/data/IMG_5745.JPG[2x2+0+0] txt:` */
     assert_eq!(wand.export_image_pixels(0, 0, 2, 2, "I").unwrap(),
         vec![212, 212, 210, 210])
+}
+
+fn test_color_reduction() {
+    START.call_once(|| {
+        magick_wand_genesis();
+    });
+    let wand = MagickWand::new();
+    assert!(wand.read_image("tests/data/IMG_5745.JPG").is_ok());
+
+    assert_eq!(38322, wand.get_image_colors());
+
+    assert!(wand.quantize_image(6, bindings::ColorspaceType::RGBColorspace, 1,
+                                bindings::DitherMethod::UndefinedDitherMethod, false.to_magick()).is_ok());
+    assert_eq!(6, wand.get_image_colors());
 }

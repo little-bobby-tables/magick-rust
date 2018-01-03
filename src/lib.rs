@@ -38,6 +38,7 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 pub use wand::*;
 pub use bindings::{MetricType, FilterType, ColorspaceType};
+pub use conversions::ToMagick;
 
 use libc::size_t;
 #[cfg(not(target_os = "freebsd"))]

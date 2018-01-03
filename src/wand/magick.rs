@@ -327,6 +327,25 @@ impl MagickWand {
         Ok(bytes)
     }
 
+    mutations!(
+        /// Reduce the number of colors in the image.
+        MagickQuantizeImage => quantize_image(
+            number_of_colors: size_t, colorspace: bindings::ColorspaceType,
+            tree_depth: size_t, dither_method: bindings::DitherMethod, measure_error: bindings::MagickBooleanType)
+
+        /// Reduce the number of colors in the image.
+        MagickQuantizeImages => quantize_images(
+            number_of_colors: size_t, colorspace: bindings::ColorspaceType,
+            tree_depth: size_t, dither_method: bindings::DitherMethod, measure_error: bindings::MagickBooleanType)
+
+        /// Discard all but one of any pixel color.
+        MagickUniqueImageColors => unique_image_colors()
+    );
+
+    get!(
+        get_image_colors,                MagickGetImageColors,            size_t
+    );
+
     string_set_get!(
         get_filename,                    set_filename,                    MagickGetFilename,                 MagickSetFilename
         get_font,                        set_font,                        MagickGetFont,                     MagickSetFont
